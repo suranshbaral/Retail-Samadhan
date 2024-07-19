@@ -1,18 +1,20 @@
-from django.shortcuts import redirect
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.exceptions import AuthenticationFailed
 
-# ******* Authenticated *******
-def auth(view_function):
-    def wrapped_view(request,*args,**kwargs):
-        if request.user.is_authenticated == False:
-            return redirect('login')
-        return view_function(request, *args, **kwargs)
-    return wrapped_view
+def auth(get_response):
+    def middleware(request):
+        jwt_authenticator = JWTAuthentication()
+        try:
+            user_auth_tuple = jwt_authenticator.authenticate(request)
+            if user_auth_tuple is not None:
+                user, _ = user_auth_tuple
+                request.user = user
+            else:
+                request.user = None
+        except AuthenticationFailed:
+            request.user = None
 
-# ******* Guest *******
-def guest(view_function):
-    def wrapped_view(request,*args,**kwargs):
-        if request.user.is_authenticated:
-            return redirect('dashboard')
-        return view_function(request, *args, **kwargs)
-    return wrapped_view
+        response = get_response(request)
+        return response
 
+    return middleware

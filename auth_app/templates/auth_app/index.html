@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="{% static 'vite.svg' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vite + React</title>
+    <!-- Adjust the path to your CSS file inside the assets folder -->
+    <link rel="stylesheet" href="{% static 'assets/index-CvVtSEZQ.css' %}">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- Adjust the path to your JavaScript file inside the assets folder -->
+    <script src="{% static 'assets/index-CwWdKf1R.js' %}" type="module"></script>
+    <script>
+        // Optionally, make CSRF token available to your JavaScript code
+        window.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    </script>
+</body>
+</html>
